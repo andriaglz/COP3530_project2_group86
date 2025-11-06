@@ -110,6 +110,13 @@ def monte_carlo_optimal_weights(price_simulations,weight_simulations,rfr=0.03):
     optimal_weights = weight_simulations[optimal_weight_idx][0]
     return optimal_weights
 
+def monte_carlo(prices,num_sim_dates,num_price_sims,num_weight_sims):
+    # aggregate function for monte carlo simulation for optimal weights
+    log_returns = get_log_returns(prices)
+    price_simulations = monte_carlo_price_simulations(prices,log_returns,num_sim_dates,num_price_sims)
+    weight_simulations = monte_carlo_weights(price_simulations,num_weight_sims)
+    optimal_weights = monte_carlo_optimal_weights(price_simulations,weight_simulations)
+    return optimal_weights
 
 # testing
 # def main():
