@@ -27,25 +27,25 @@ def markowitz(closes):
 
 
 # testing
-from data_preprocessing import *
-def main():
-    csv_file = 'stock_details_5_years.csv'
-    close_data, dates, tickers = read_raw_csv(csv_file)
-    dates_subset = dates[:10]
-    tickers_subset = tickers[:10]
-    close_subset = close_data[close_data['Date'].isin(dates_subset)]
-    close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
-                                (close_data['Company'].isin(tickers_subset))]
-    prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
+# from data_preprocessing import *
+# def main():
+#     csv_file = 'stock_details_5_years.csv'
+#     close_data, dates, tickers = read_raw_csv(csv_file)
+#     dates_subset = dates[:10]
+#     tickers_subset = tickers[:10]
+#     close_subset = close_data[close_data['Date'].isin(dates_subset)]
+#     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
+#                                 (close_data['Company'].isin(tickers_subset))]
+#     prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
 
-    try:
-        weights = markowitz(prices)
-        print("Optimal Weights:\n", weights)
-        print("Sum of weights:", np.sum(weights))
-    except Exception as e:
-        print("Error:", e)
-    return 0
+#     try:
+#         weights = markowitz(prices)
+#         print("Optimal Weights:\n", weights)
+#         print("Sum of weights:", np.sum(weights))
+#     except Exception as e:
+#         print("Error:", e)
+#     return 0
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
