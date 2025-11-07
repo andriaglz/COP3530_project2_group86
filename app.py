@@ -1,0 +1,138 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#Configuring the page
+st.set_page_config(
+    page_title="OptiTraders Portfolio Optimization Platform",
+    layout="wide"
+)
+
+#Formatting! :)
+st.markdown("""
+    <style>
+    /* Base styling */
+    .stApp {
+        background-color: #0E1117;
+        color: #FAFAFA;
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+    }
+
+    /* Center title and headers */
+    h1, h2, h3, h4 {
+        color: #F8F8F8;
+        text-align: center;
+    }
+
+    /* Center markdown text and labels */
+    .stMarkdown, div[data-testid="stMarkdownContainer"] p, label {
+        color: #E7E9EC !important;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #111319;
+        color: #FFFFFF;
+    }
+
+    /* Buttons */
+    div[data-testid="stButton"] > button {
+        background-color: #1F2937;
+        color: #FAFAFA;
+        border-radius: 6px;
+        padding: 0.45rem 0.85rem;
+        border: none;
+        transition: 0.3s ease;
+        display: block;
+        margin: 0 auto;
+    }
+
+    div[data-testid="stButton"] > button:hover {
+        background-color: #374151;
+        color: #FFFFFF;
+    }
+
+    /* Dropdowns (select/multiselect) */
+    div[data-baseweb="select"] {
+        background-color: transparent !important;
+        color: #FAFAFA !important;
+        border-radius: 6px;
+        border: 1px solid #3E4450;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Dropdown options */
+    ul[data-baseweb="menu"] {
+        background-color: #2E3440;
+        color: #FAFAFA;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    /* Chart styling */
+    .stPlotlyChart, .stPyplot {
+        background-color: transparent !important;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Title
+st.markdown("<h1>OptiTraders Portfolio Optimization Platform</h1>", unsafe_allow_html=True)
+
+
+# Selecting the assets
+
+st.markdown("<h3>Select assets for your portfolio:</h3>", unsafe_allow_html=True)
+tickers = ["AAPL", "GOOG", "AMZN", "MSFT", "TSLA", "META"]
+selected_tickers = st.multiselect("", options=tickers, default=tickers[:3])
+
+
+# Making the split layout (2 colums) so the thing is divided and both are shown for easier comparison and
+# better looking visually
+
+col_mc, col_mk = st.columns(2, gap="large")
+
+#Monte carlo selection
+with col_mc:
+    st.markdown("<h2>Monte Carlo Simulation</h2>", unsafe_allow_html=True)
+    st.markdown("Sharpe Ratio: 1.25")
+    st.markdown("Computation Time: 2.4 s")
+    st.markdown("Memory Usage: 50 MB")
+
+    st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
+    fig, ax = plt.subplots(figsize=(5, 4))
+    ax.bar(["AAPL", "GOOG", "AMZN"], [0.3, 0.5, 0.2], color="#60A5FA")
+    ax.set_ylim(0, 1)
+    ax.set_ylabel("Weight", color="#FAFAFA")
+    ax.set_title("Monte Carlo Portfolio Weights", color="#FAFAFA", fontname='Segoe UI')
+    ax.tick_params(colors="#FAFAFA")
+    fig.patch.set_facecolor('#0E1117')
+    ax.set_facecolor('#1F2937')
+    st.pyplot(fig)
+
+# Markowitz selection
+with col_mk:
+    st.markdown("<h2>Markowitz Mean-Variance Optimization</h2>", unsafe_allow_html=True)
+    st.markdown("Sharpe Ratio: 1.10")
+    st.markdown("Computation Time: 0.6 s")
+    st.markdown("Memory Usage: 10 MB")
+
+    st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
+    fig2, ax2 = plt.subplots(figsize=(5, 4))
+    ax2.bar(["AAPL", "GOOG", "AMZN"], [0.4, 0.4, 0.2], color="#F59E0B")
+    ax2.set_ylim(0, 1)
+    ax2.set_ylabel("Weight", color="#FAFAFA")
+    ax2.set_title("Markowitz Portfolio Weights", color="#FAFAFA", fontname='Segoe UI')
+    ax2.tick_params(colors="#FAFAFA")
+    fig2.patch.set_facecolor('#0E1117')
+    ax2.set_facecolor('#1F2937')
+    st.pyplot(fig2)
