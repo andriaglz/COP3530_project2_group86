@@ -24,7 +24,6 @@ def monte_carlo_price_simulations(prices,log_returns, num_sim_dates, num_price_s
     sigma_squared = np.var(log_returns,axis=0)      # variance
     sigma = np.sqrt(sigma_squared)                  # standard deviation
     drift = mu - (sigma_squared/2)                  # drift
-    num_dates = log_returns.shape[0]
     num_tickers = log_returns.shape[1]
     shapes = [item.shape for item in [mu,sigma_squared,sigma,drift]]
     assert all(s == (num_tickers,) for s in shapes)
@@ -33,18 +32,10 @@ def monte_carlo_price_simulations(prices,log_returns, num_sim_dates, num_price_s
     # shape: num_sim_dates x num_price_sims x num_tickers
     last_prices = prices[-1]
     simulated_prices = np.zeros((num_sim_dates,num_price_sims, num_tickers))
-    for ticker_idx in range(num_tickers):
-        # random_value_i = sigma_i * random number from N(0,1)
-        # random_values size: num_sim_dates x num_price_sims
-        random_values = sigma[ticker_idx] * np.random.normal(0,1,(num_sim_dates,num_price_sims))
-        
-        # new_price = prev_price * e^(drift + random_value)
-        exp_term = np.exp(drift[ticker_idx] + random_values)
-        # combine the exponential terms from prev steps
-        # shape: num_sim_dates x num_price_sims
-        exp_terms = np.cumprod(exp_term,axis=0)   
-        simulated_prices[:,:,ticker_idx] = last_prices[ticker_idx] * exp_terms
-
+    random_values = sigma * np.random.normal(0,1,(num_sim_dates,num_price_sims,num_tickers))
+    exp_term = np.exp(drift + random_values)
+    exp_terms = np.cumprod(exp_term,axis=0) 
+    simulated_prices = last_prices * exp_terms  
     return simulated_prices
 
 def monte_carlo_weights(simulated_prices, num_weight_simulations):
@@ -52,14 +43,6 @@ def monte_carlo_weights(simulated_prices, num_weight_simulations):
     assert len(simulated_prices.shape) == 3
     _, num_price_sims, num_tickers = simulated_prices.shape
 
-    # weight simulations
-    # for each simulation, generate random weights for each asset
-    # random weights should sum to 1
-    # final weight matrix 
-    # weights stay consistent over the trading period
-    # final weights shape: num_weight_simulations x num_price_sims x num_tickers
-    
-    
     # randomly sample weights from a standard normal distribution
     # weights in the portfolio should sum to 1
     # weights shape: (num_weight_simulations, num_tickers)
@@ -67,7 +50,9 @@ def monte_carlo_weights(simulated_prices, num_weight_simulations):
     weights = weights / np.sum(weights,axis=1,keepdims=True)
 
     # duplicate the weights to be consistent across all the dates for each price simulation
-    final_weights = np.tile(weights.reshape(weights.shape[0],1,weights.shape[1]),(1,num_price_sims,1))
+    # final weights shape: num_weight_simulations x num_price_sims x num_tickers
+    final_weights = np.expand_dims(weights,axis=1)
+    final_weights = np.broadcast_to(final_weights,(num_weight_simulations,num_price_sims,num_tickers))
 
     assert np.allclose(np.sum(final_weights,axis=2),1)
 

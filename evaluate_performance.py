@@ -19,8 +19,9 @@ def calc_sharpe(weights,prices,rfr=0):
     mu = np.mean(portfolio_returns,axis=0)
     sigma = np.std(portfolio_returns,axis=0)
     sharpe = (mu-rfr)/sigma
+    annualized_sharpe = sharpe * np.sqrt(252)
 
-    return sharpe
+    return annualized_sharpe
 
 
 # testing
@@ -28,7 +29,7 @@ def main():
     csv_file = 'stock_details_5_years.csv'
     # for data subset
     num_dates = 1200
-    # num_tickers = 10
+    num_tickers = 400
     # for monte carlo simulation
     num_sim_dates = 100
     num_price_sims = 100
@@ -40,6 +41,10 @@ def main():
     dates_subset = dates[:num_dates]
     # tickers_subset = tickers[:num_tickers]
     tickers_subset = ['AAPL','MSFT','GOOGL','AMZN','NVDA','META','TSLA']
+    # tickers_subset = ['AMZN','NVDA','META']
+    # tickers_subset = ['NVDA']
+    print(tickers_subset)
+
     close_subset = close_data[close_data['Date'].isin(dates_subset)]
     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
                                 (close_data['Company'].isin(tickers_subset))]
