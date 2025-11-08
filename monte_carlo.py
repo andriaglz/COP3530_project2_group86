@@ -32,6 +32,7 @@ def monte_carlo_price_simulations(prices,log_returns, num_sim_dates, num_price_s
     # shape: num_sim_dates x num_price_sims x num_tickers
     last_prices = prices[-1]
     simulated_prices = np.zeros((num_sim_dates,num_price_sims, num_tickers))
+    np.random.seed(0)
     random_values = sigma * np.random.normal(0,1,(num_sim_dates,num_price_sims,num_tickers))
     exp_term = np.exp(drift + random_values)
     exp_terms = np.cumprod(exp_term,axis=0) 
@@ -46,7 +47,6 @@ def monte_carlo_weights(simulated_prices, num_weight_simulations):
     # randomly sample weights from a standard normal distribution
     # weights in the portfolio should sum to 1
     # weights shape: (num_weight_simulations, num_tickers)
-    # weights = np.random.normal(0,1,(num_weight_simulations,num_tickers))
     weights = np.random.normal(0,0.01,(num_weight_simulations,num_tickers))
     weights = weights / np.sum(weights,axis=1,keepdims=True)
 

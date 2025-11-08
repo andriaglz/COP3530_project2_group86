@@ -4,29 +4,6 @@ from monte_carlo import *
 import time
 import tracemalloc
 
-
-
-# def calc_sharpe(weights,prices,rfr=0):
-#     # log returns shape: num_dates-1 x num_tickers
-#     log_returns = get_log_returns(prices)
-#     _,num_tickers = log_returns.shape
-#     # weights shape: num_tickers
-#     # print(weights.shape,num_tickers)
-#     assert weights.shape == (num_tickers,)
-
-#     # calculate portfolio returns
-#     individual_returns = log_returns * weights
-#     portfolio_returns = np.sum(individual_returns,axis=-1)
-
-#     # calculate sharpe
-#     # sharpe = (mu-rfr)/sigma = (average_return - risk_free_rate) / std_return
-#     mu = np.mean(portfolio_returns,axis=0)
-#     sigma = np.std(portfolio_returns,axis=0)
-#     sharpe = (mu-rfr)/sigma
-#     annualized_sharpe = sharpe * np.sqrt(252)
-
-#     return annualized_sharpe
-
 def calc_sharpe(weights, prices, rfr=0):
     # log returns shape: num_dates-1 x num_tickers
     log_returns = get_log_returns(prices)
