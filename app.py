@@ -112,7 +112,7 @@ else:
         st.markdown(f"Sharpe Ratio: {inputs['Monte Carlo Sharpe']}")
         st.markdown(f"Weights: {np.array(inputs['Monte Carlo Weights']).tolist()}")
         st.markdown(f"Computation Time: {inputs['Monte Carlo Time']} seconds")
-        st.markdown(f"Memory Usage: {inputs['Monte Carlo Memory']} bits")
+        st.markdown(f"Memory Usage: {inputs['Monte Carlo Memory']} kibibytes")
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig, ax = plt.subplots(figsize=(5, 4))
@@ -133,7 +133,7 @@ else:
         st.markdown(f"Sharpe Ratio: {inputs['Markowitz Sharpe']}")
         st.markdown(f"Weights: {np.array(inputs['Markowitz Weights']).tolist()}")
         st.markdown(f"Computation Time: {inputs['Markowitz Time']} seconds")
-        st.markdown(f"Memory Usage: {inputs['Markowitz Memory']} bits")
+        st.markdown(f"Memory Usage: {inputs['Markowitz Memory']} kibibytes")
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig2, ax2 = plt.subplots(figsize=(5, 4))
