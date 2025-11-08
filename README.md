@@ -13,7 +13,9 @@ We intended our program to work as both an effective tool for building optimal p
 To run the program from terminal, run the following command:
 
 
-streamlit run C:\Users\dylan\PycharmProjects\COP3530_project2_group86\app.py
+streamlit run ...\COP3530_project2_group86\app.py
+
+(the ... will depend on wherever you save this project to)
 
 
 This should pull up our app in your browser. From here, there's a dropdown member listing 500 companies you can include in your analysis by their ticker abbreviation. 
