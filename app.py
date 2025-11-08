@@ -96,49 +96,52 @@ st.markdown("<h3>Select assets for your portfolio:</h3>", unsafe_allow_html=True
 # tickers = ["AAPL", "GOOG", "AMZN", "MSFT", "TSLA", "META"]
 close_data, dates, tickers = read_raw_csv('stock_details_5_years.csv')
 selected_tickers = st.multiselect("label", options=tickers, default=tickers[:3],label_visibility='collapsed')
-inputs = get_inputs(close_data,dates,selected_tickers)
+if not selected_tickers:
+    st.warning("Please select at least one ticker to display the portfolio.")
+else:
+    inputs = get_inputs(close_data,dates,selected_tickers)
 
-# Making the split layout (2 colums) so the thing is divided and both are shown for easier comparison and
-# better looking visually
+    # Making the split layout (2 colums) so the thing is divided and both are shown for easier comparison and
+    # better looking visually
 
-col_mc, col_mk = st.columns(2, gap="large")
+    col_mc, col_mk = st.columns(2, gap="large")
 
-#Monte carlo selection
-with col_mc:
-    st.markdown("<h2>Monte Carlo Simulation</h2>", unsafe_allow_html=True)
-    st.markdown(f"Sharpe Ratio: {inputs['Monte Carlo Sharpe']}")
-    st.markdown(f"Weights: {inputs['Monte Carlo Weights']}")
-    st.markdown("Computation Time: CALCULATE")
-    st.markdown("Memory Usage: CALCULATE")
+    #Monte carlo selection
+    with col_mc:
+        st.markdown("<h2>Monte Carlo Simulation</h2>", unsafe_allow_html=True)
+        st.markdown(f"Sharpe Ratio: {inputs['Monte Carlo Sharpe']}")
+        st.markdown(f"Weights: {inputs['Monte Carlo Weights']}")
+        st.markdown("Computation Time: CALCULATE")
+        st.markdown("Memory Usage: CALCULATE")
 
-    st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
-    fig, ax = plt.subplots(figsize=(5, 4))
-    ax.bar(selected_tickers, inputs['Monte Carlo Weights'], color="#60A5FA")
-    ax.set_ylim(np.min(inputs["Monte Carlo Weights"])-1, np.max(inputs["Monte Carlo Weights"])+1)
-    ax.set_ylabel("Weight", color="#FAFAFA")
-    ax.set_title("Monte Carlo Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
-    ax.tick_params(colors="#FAFAFA")
-    ax.axhline(0, color="#FAFAFA", linewidth=1.2)
-    fig.patch.set_facecolor('#0E1117')
-    ax.set_facecolor('#1F2937')
-    st.pyplot(fig)
+        st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
+        fig, ax = plt.subplots(figsize=(5, 4))
+        ax.bar(selected_tickers, inputs['Monte Carlo Weights'], color="#60A5FA")
+        ax.set_ylim(np.min(inputs["Monte Carlo Weights"])-1, np.max(inputs["Monte Carlo Weights"])+1)
+        ax.set_ylabel("Weight", color="#FAFAFA")
+        ax.set_title("Monte Carlo Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
+        ax.tick_params(colors="#FAFAFA")
+        ax.axhline(0, color="#FAFAFA", linewidth=1.2)
+        fig.patch.set_facecolor('#0E1117')
+        ax.set_facecolor('#1F2937')
+        st.pyplot(fig)
 
-# Markowitz selection
-with col_mk:
-    st.markdown("<h2>Markowitz Mean-Variance Optimization</h2>", unsafe_allow_html=True)
-    st.markdown(f"Sharpe Ratio: {inputs['Markowitz Sharpe']}")
-    st.markdown(f"Weights: {inputs['Markowitz Weights']}")
-    st.markdown("Computation Time: CALCULATE")
-    st.markdown("Memory Usage: CALCULATE")
+    # Markowitz selection
+    with col_mk:
+        st.markdown("<h2>Markowitz Mean-Variance Optimization</h2>", unsafe_allow_html=True)
+        st.markdown(f"Sharpe Ratio: {inputs['Markowitz Sharpe']}")
+        st.markdown(f"Weights: {inputs['Markowitz Weights']}")
+        st.markdown("Computation Time: CALCULATE")
+        st.markdown("Memory Usage: CALCULATE")
 
-    st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
-    fig2, ax2 = plt.subplots(figsize=(5, 4))
-    ax2.bar(selected_tickers, inputs['Markowitz Weights'], color="#60A5FA")
-    ax2.set_ylim(np.min(inputs["Markowitz Weights"])-1, np.max(inputs["Markowitz Weights"])+1)
-    ax2.set_ylabel("Weight", color="#FAFAFA")
-    ax2.set_title("Markowitz Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
-    ax2.tick_params(colors="#FAFAFA")
-    ax2.axhline(0, color="#FAFAFA", linewidth=1.2)
-    fig2.patch.set_facecolor('#0E1117')
-    ax2.set_facecolor('#1F2937')
-    st.pyplot(fig2)
+        st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
+        fig2, ax2 = plt.subplots(figsize=(5, 4))
+        ax2.bar(selected_tickers, inputs['Markowitz Weights'], color="#60A5FA")
+        ax2.set_ylim(np.min(inputs["Markowitz Weights"])-1, np.max(inputs["Markowitz Weights"])+1)
+        ax2.set_ylabel("Weight", color="#FAFAFA")
+        ax2.set_title("Markowitz Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
+        ax2.tick_params(colors="#FAFAFA")
+        ax2.axhline(0, color="#FAFAFA", linewidth=1.2)
+        fig2.patch.set_facecolor('#0E1117')
+        ax2.set_facecolor('#1F2937')
+        st.pyplot(fig2)
