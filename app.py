@@ -116,7 +116,8 @@ else:
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig, ax = plt.subplots(figsize=(5, 4))
-        ax.bar(selected_tickers, inputs['Monte Carlo Weights'], color="#60A5FA")
+        colors_mc = ['red' if w < 0 else '#60A5FA' for w in inputs['Monte Carlo Weights']]
+        ax.bar(selected_tickers, inputs['Monte Carlo Weights'], color=colors_mc)
         ax.set_ylim(np.min(inputs["Monte Carlo Weights"])-1, np.max(inputs["Monte Carlo Weights"])+1)
         ax.set_ylabel("Weight", color="#FAFAFA")
         ax.set_title("Monte Carlo Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
@@ -136,7 +137,8 @@ else:
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig2, ax2 = plt.subplots(figsize=(5, 4))
-        ax2.bar(selected_tickers, inputs['Markowitz Weights'], color="#60A5FA")
+        colors_mk = ['red' if w < 0 else '#60A5FA' for w in inputs['Markowitz Weights']]
+        ax2.bar(selected_tickers, inputs['Markowitz Weights'], color=colors_mk)
         ax2.set_ylim(np.min(inputs["Markowitz Weights"])-1, np.max(inputs["Markowitz Weights"])+1)
         ax2.set_ylabel("Weight", color="#FAFAFA")
         ax2.set_title("Markowitz Portfolio Weights", color="#FAFAFA", fontname='DejaVu Sans')
