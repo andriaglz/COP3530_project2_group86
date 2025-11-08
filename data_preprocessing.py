@@ -77,26 +77,3 @@ def get_mean_returns(log_returns):
     # shape: num_tickers x 1
     return np.mean(log_returns,axis=0)
 
-# testing
-# def main():
-#     csv_file = 'stock_details_5_years.csv'
-
-#     close_data, dates, tickers = read_raw_csv(csv_file)
-#     dates_subset = dates[:10]
-#     tickers_subset = tickers[:10]
-#     close_subset = close_data[close_data['Date'].isin(dates_subset)]
-#     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
-#                                 (close_data['Company'].isin(tickers_subset))]
-#     prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
-
-#     log_returns = get_log_returns(prices)
-#     mu = get_mean_returns(log_returns)
-#     Sigma = get_covariance_matrix(log_returns,mu)
-
-#     print(Sigma.shape)
-
-#     return 0
-
-
-# if __name__ == "__main__":
-#     main()

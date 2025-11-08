@@ -7,7 +7,7 @@ def markowitz(closes):
     https://sites.math.washington.edu/~burke/crs/408/fin-proj/mark1.pdf
     '''
     # compute returns
-    closes = closes.T       #######################
+    closes = closes.T       
     data_array = (closes[:, 1:] - closes[:, :-1]) / closes[:, :-1]
     lam = 1
     means = np.mean(data_array, axis = 1)
@@ -36,27 +36,3 @@ def markowitz(closes):
         alpha = (mew_b - np.dot(min_var, means))/np.dot(means, v)
         return min_var + alpha*v
 
-
-# testing
-# from data_preprocessing import *
-# def main():
-#     csv_file = 'stock_details_5_years.csv'
-#     close_data, dates, tickers = read_raw_csv(csv_file)
-#     dates_subset = dates[:10]
-#     tickers_subset = tickers[:10]
-#     close_subset = close_data[close_data['Date'].isin(dates_subset)]
-#     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
-#                                 (close_data['Company'].isin(tickers_subset))]
-#     prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
-
-#     try:
-#         weights = markowitz(prices)
-#         print("Optimal Weights:\n", weights)
-#         print("Sum of weights:", np.sum(weights))
-#     except Exception as e:
-#         print("Error:", e)
-#     return 0
-
-
-# if __name__ == "__main__":
-#     main()

@@ -46,7 +46,8 @@ def monte_carlo_weights(simulated_prices, num_weight_simulations):
     # randomly sample weights from a standard normal distribution
     # weights in the portfolio should sum to 1
     # weights shape: (num_weight_simulations, num_tickers)
-    weights = np.random.normal(0,1,(num_weight_simulations,num_tickers))
+    # weights = np.random.normal(0,1,(num_weight_simulations,num_tickers))
+    weights = np.random.normal(0,0.01,(num_weight_simulations,num_tickers))
     weights = weights / np.sum(weights,axis=1,keepdims=True)
 
     # duplicate the weights to be consistent across all the dates for each price simulation
@@ -58,7 +59,7 @@ def monte_carlo_weights(simulated_prices, num_weight_simulations):
 
     return final_weights
 
-def monte_carlo_optimal_weights(price_simulations,weight_simulations,rfr=0.03):
+def monte_carlo_optimal_weights(price_simulations,weight_simulations,rfr=0):
     # weights shape: num_weight_simulations x num_price_sims x num_tickers
     num_weight_sims,num_price_sims,num_tickers = weight_simulations.shape
     # prices shape: num_sim_dates x num_price_sims x num_tickers
@@ -81,9 +82,11 @@ def monte_carlo_optimal_weights(price_simulations,weight_simulations,rfr=0.03):
     # calculate the sharpe for each portfolio
     # sharpe = (mu-rfr)/sigma = (average_return - risk_free_rate) / std_return
     mu = np.mean(portfolio_returns,axis=1)
-    sigma = np.std(portfolio_returns,axis=1)
+    # portfolio_sharpes = (mu-rfr)/sigma
+    rfr_deannualized = (1+rfr)**1/252 - 1
+    sigma = np.std(portfolio_returns,axis=1,ddof=1)
+    portfolio_sharpes = (mu-rfr_deannualized)/sigma
     # portfolio sharpe ratios shape: num_weight_sims x num_price_sims
-    portfolio_sharpes = (mu-rfr)/sigma
     assert portfolio_sharpes.shape == (num_weight_sims,num_price_sims)
 
     # calculate the average sharpe for each weight sim and determine the optimal weights
@@ -102,35 +105,3 @@ def monte_carlo(prices,num_sim_dates,num_price_sims,num_weight_sims):
     weight_simulations = monte_carlo_weights(price_simulations,num_weight_sims)
     optimal_weights = monte_carlo_optimal_weights(price_simulations,weight_simulations)
     return optimal_weights
-
-# testing
-# def main():
-#     csv_file = 'stock_details_5_years.csv'
-#     num_dates = 10
-#     num_tickers = 10
-#     num_sim_dates = 10
-#     num_price_sims = 20
-#     num_weight_sims = 30
-
-#     close_data, dates, tickers = read_raw_csv(csv_file)
-#     dates_subset = dates[:num_dates]
-#     tickers_subset = tickers[:num_tickers]
-#     close_subset = close_data[close_data['Date'].isin(dates_subset)]
-#     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
-#                                 (close_data['Company'].isin(tickers_subset))]
-#     prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
-
-#     log_returns = get_log_returns(prices)
-#     mu = get_mean_returns(log_returns)
-
-#     price_simulations = monte_carlo_price_simulations(prices,log_returns,num_sim_dates,num_price_sims)
-#     weight_simulations = monte_carlo_weights(price_simulations,num_weight_sims)
-
-#     optimal_weights = monte_carlo_optimal_weights(price_simulations,weight_simulations)
-#     print(optimal_weights)
-#     print(np.sum(optimal_weights))
-#     return 0
-
-
-# if __name__ == "__main__":
-#     main()
