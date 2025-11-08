@@ -1,15 +1,26 @@
 import numpy as np
 from numpy.linalg import inv
 
-def markowitz(closes):
+def markowitz(closes, lam = 1):
     '''
+    Uses the Markowitz Mean-Variance Portfolio Theory to calculate the optimal weights,
+    assuming no risk free assets
+
+    Input:
+        closes: matrix (np.array) of closing stock prices for various companies for 5 years
+            rows: closing stock prices for a single company
+            columns: closing stock prices for a single day
+        lam: the value of lambda as mentioned in the paper
+            defaults to 1 for testing purposes
+    Output:
+        optimal weights for each company based on Markowitz Mean-Variance Portfolio Theory
+
     formulas found here:
     https://sites.math.washington.edu/~burke/crs/408/fin-proj/mark1.pdf
     '''
     # compute returns
     closes = closes.T       
     data_array = (closes[:, 1:] - closes[:, :-1]) / closes[:, :-1]
-    lam = 1
     means = np.mean(data_array, axis = 1)
     resid = data_array - np.linspace(means, means, data_array.shape[1]).T
     cov = (resid@resid.T)/data_array.shape[1]
