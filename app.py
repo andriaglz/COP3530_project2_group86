@@ -101,7 +101,7 @@ if not selected_tickers:
 else:
     inputs = get_inputs(close_data,dates,selected_tickers)
 
-    # Making the split layout (2 colums) so the thing is divided and both are shown for easier comparison and
+    # Making the split layout (2 columns) so the thing is divided and both are shown for easier comparison and
     # better looking visually
 
     col_mc, col_mk = st.columns(2, gap="large")
@@ -110,9 +110,9 @@ else:
     with col_mc:
         st.markdown("<h2>Monte Carlo Simulation</h2>", unsafe_allow_html=True)
         st.markdown(f"Sharpe Ratio: {inputs['Monte Carlo Sharpe']}")
-        st.markdown(f"Weights: {inputs['Monte Carlo Weights']}")
-        st.markdown("Computation Time: CALCULATE")
-        st.markdown("Memory Usage: CALCULATE")
+        st.markdown(f"Weights: {np.array(inputs['Monte Carlo Weights']).tolist()}")
+        st.markdown(f"Computation Time: {inputs['Monte Carlo Time']} seconds")
+        st.markdown(f"Memory Usage: {inputs['Monte Carlo Memory']} bits")
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig, ax = plt.subplots(figsize=(5, 4))
@@ -130,9 +130,9 @@ else:
     with col_mk:
         st.markdown("<h2>Markowitz Mean-Variance Optimization</h2>", unsafe_allow_html=True)
         st.markdown(f"Sharpe Ratio: {inputs['Markowitz Sharpe']}")
-        st.markdown(f"Weights: {inputs['Markowitz Weights']}")
-        st.markdown("Computation Time: CALCULATE")
-        st.markdown("Memory Usage: CALCULATE")
+        st.markdown(f"Weights: {np.array(inputs['Markowitz Weights']).tolist()}")
+        st.markdown(f"Computation Time: {inputs['Markowitz Time']} seconds")
+        st.markdown(f"Memory Usage: {inputs['Markowitz Memory']} bits")
 
         st.markdown("<h3>Portfolio Visualization</h3>", unsafe_allow_html=True)
         fig2, ax2 = plt.subplots(figsize=(5, 4))
