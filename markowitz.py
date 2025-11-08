@@ -1,15 +1,26 @@
 import numpy as np
 from numpy.linalg import inv
 
-def markowitz(closes):
+def markowitz(closes, lam = 1):
     '''
+    Uses the Markowitz Mean-Variance Portfolio Theory to calculate the optimal weights,
+    assuming no risk free assets
+
+    Input:
+        closes: matrix (np.array) of closing stock prices for various companies for 5 years
+            rows: closing stock prices for a single company
+            columns: closing stock prices for a single day
+        lam: the value of lambda as mentioned in the paper
+            defaults to 1 for testing purposes
+    Output:
+        optimal weights for each company based on Markowitz Mean-Variance Portfolio Theory
+
     formulas found here:
     https://sites.math.washington.edu/~burke/crs/408/fin-proj/mark1.pdf
     '''
     # compute returns
-    closes = closes.T       #######################
+    closes = closes.T       
     data_array = (closes[:, 1:] - closes[:, :-1]) / closes[:, :-1]
-    lam = 1
     means = np.mean(data_array, axis = 1)
     resid = data_array - np.linspace(means, means, data_array.shape[1]).T
     cov = (resid@resid.T)/data_array.shape[1]
@@ -36,27 +47,3 @@ def markowitz(closes):
         alpha = (mew_b - np.dot(min_var, means))/np.dot(means, v)
         return min_var + alpha*v
 
-
-# testing
-# from data_preprocessing import *
-# def main():
-#     csv_file = 'stock_details_5_years.csv'
-#     close_data, dates, tickers = read_raw_csv(csv_file)
-#     dates_subset = dates[:10]
-#     tickers_subset = tickers[:10]
-#     close_subset = close_data[close_data['Date'].isin(dates_subset)]
-#     close_subset = close_data[(close_data['Date'].isin(dates_subset)) & 
-#                                 (close_data['Company'].isin(tickers_subset))]
-#     prices = get_prices_matrix(close_subset,dates_subset,tickers_subset)
-
-#     try:
-#         weights = markowitz(prices)
-#         print("Optimal Weights:\n", weights)
-#         print("Sum of weights:", np.sum(weights))
-#     except Exception as e:
-#         print("Error:", e)
-#     return 0
-
-
-# if __name__ == "__main__":
-#     main()
